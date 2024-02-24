@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +41,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import lourdes.vega.rickandmorty.R
+import lourdes.vega.rickandmorty.network.model.Character
 import lourdes.vega.rickandmorty.view.navigation.Route
 import lourdes.vega.rickandmorty.view.DescriptionComponent
 import lourdes.vega.rickandmorty.view.SubtitleComponent
@@ -58,7 +59,7 @@ import lourdes.vega.rickandmorty.view.ui.characters.SearchState
 import lourdes.vega.rickandmorty.view.viewmodel.CharactersViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CharactersScreen(
     navController: NavController,
@@ -105,73 +106,27 @@ fun CharactersScreen(
             text = stringResource(id = R.string.app_name)
         )
 
-        SearchField(state,viewModel, keyboardController)
+        SearchField(state,
+            onSearch = {
+            viewModel.onEvent(SearchEvent.CleanEvent)
+            viewModel.onEvent(SearchEvent.OnSearch)
+            keyboardController?.hide() },
+            onValueChanged = { viewModel.onEvent(SearchEvent.OnQueryChange(it))}
+        )
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .fillMaxSize(),
-            state = scrollState
-        ){
 
-            items(state.characters){ character ->
-                Spacer(modifier = Modifier.padding(top = 12.dp))
-                ElevatedCard(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth(),
-                    onClick = {
-                        viewModel.onEvent(SearchEvent.OnTrackCharacterClick(character))
-                        navController.navigate(Route.CHARACTER_DETAIL)
-                    },
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White,
-                    )
-                ) {
-                    Row {
-                        AsyncImage(
-                            modifier = Modifier
-                                .size(90.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .padding(vertical = 6.dp)
-                                .align(Alignment.CenterVertically),
-                            model = character.image,
-                            contentDescription = "Image",
-                            contentScale = ContentScale.Fit
-                        )
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-
-                            SubtitleComponent(
-                                text = character.name,
-                                modifier = Modifier
-                                    .padding(top = 12.dp)
-                            )
-
-                            DescriptionComponent(
-                                first = stringResource(id = R.string.species),
-                                second = character.species,
-                                modifier = Modifier.padding(top =6.dp)
-                            )
-                            DescriptionComponent(
-                                first = stringResource(id = R.string.location),
-                                second = character.location.name,
-                                modifier = Modifier.padding(top =6.dp)
-                            )
-
-                        }
-                    }
-                }
-
-            }
+        CharacterList(scrollState = scrollState, characters = state.characters) { character ->
+            viewModel.onEvent(SearchEvent.OnTrackCharacterClick(character))
+            navController.navigate(Route.CHARACTER_DETAIL)
         }
-
     }
 
+    InteractionApiState(state = state)
+}
+
+
+@Composable
+fun InteractionApiState(state: SearchState){
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -188,14 +143,82 @@ fun CharactersScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CharacterList(scrollState: LazyListState,
+                  characters: List<Character>,
+                  onClickItem: (Character) -> Unit
+){
+    LazyColumn(
+        modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .fillMaxSize(),
+        state = scrollState
+    ){
+
+        items(characters){ character ->
+            Spacer(modifier = Modifier.padding(top = 12.dp))
+            ElevatedCard(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth(),
+                onClick = {
+                    onClickItem(character)
+                },
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White,
+                )
+            ) {
+                Row {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .padding(vertical = 6.dp)
+                            .align(Alignment.CenterVertically),
+                        model = character.image,
+                        contentDescription = "Image",
+                        contentScale = ContentScale.Fit
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        SubtitleComponent(
+                            text = character.name,
+                            modifier = Modifier
+                                .padding(top = 12.dp)
+                        )
+
+                        DescriptionComponent(
+                            first = stringResource(id = R.string.species),
+                            second = character.species,
+                            modifier = Modifier.padding(top =6.dp)
+                        )
+                        DescriptionComponent(
+                            first = stringResource(id = R.string.location),
+                            second = character.location.name,
+                            modifier = Modifier.padding(top =6.dp)
+                        )
+
+                    }
+                }
+            }
+
+        }
+    }
+}
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchField(
     state: SearchState,
-    viewModel: CharactersViewModel,
-    keyboardController: SoftwareKeyboardController?
+    onSearch: () -> Unit,
+    onValueChanged: (String) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -205,7 +228,8 @@ fun SearchField(
     ) {
         TextField(
             value = state.query,
-            onValueChange = { viewModel.onEvent(SearchEvent.OnQueryChange(it))},
+            onValueChange = {
+                onValueChanged(it) },
             modifier = Modifier.weight(1f),
             placeholder = { Text(text = "Search...") },
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -215,9 +239,7 @@ fun SearchField(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    viewModel.onEvent(SearchEvent.CleanEvent)
-                    viewModel.onEvent(SearchEvent.OnSearch)
-                    keyboardController?.hide()
+                    onSearch()
                     defaultKeyboardAction(ImeAction.Search)
                 }
             ),
@@ -225,11 +247,7 @@ fun SearchField(
         )
 
         IconButton(
-            onClick = {
-                viewModel.onEvent(SearchEvent.CleanEvent)
-                viewModel.onEvent(SearchEvent.OnSearch)
-                keyboardController?.hide()
-            }
+            onClick = {onSearch()}
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_search),
