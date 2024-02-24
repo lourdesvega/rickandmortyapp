@@ -8,7 +8,7 @@ class RickAndMortyRepository @Inject constructor(
     private val apiService: ApiService
 ){
 
-    suspend fun getCharacters(page: String?) : Result<Characters> = try {
+    suspend fun getCharacters(page: String) : Result<Characters> = try {
         val getCharacters = apiService.getCharacters(page)
         Result.success(getCharacters)
     }catch (e: Exception){

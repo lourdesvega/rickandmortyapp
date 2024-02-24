@@ -8,7 +8,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import lourdes.vega.rickandmorty.repository.RickAndMortyRepository
 import lourdes.vega.rickandmorty.usecase.CharacterUseCases
 import lourdes.vega.rickandmorty.usecase.GetCharacters
-import lourdes.vega.rickandmorty.usecase.GetListCharacters
 import lourdes.vega.rickandmorty.usecase.GetPagination
 
 @Module
@@ -21,7 +20,6 @@ object CharactersDomain {
     ) =
         CharacterUseCases(
             getCharacters = GetCharacters(repository),
-            getPagination = GetPagination(),
-            getListCharacters = GetListCharacters()
+            getPagination = GetPagination()
         )
 }

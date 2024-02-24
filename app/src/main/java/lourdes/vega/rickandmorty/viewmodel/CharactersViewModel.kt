@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import lourdes.vega.rickandmorty.R
 import lourdes.vega.rickandmorty.model.Character
 import lourdes.vega.rickandmorty.view.characters.SearchEvent
 import lourdes.vega.rickandmorty.view.characters.SearchState
@@ -57,17 +56,16 @@ class CharactersViewModel @Inject constructor(
             )
             characterUseCases
                 .getCharacters(
-                    page = characterUseCases.getPagination(
-                        query = state.query,
-                        page = state.pagination?.next
-                    )
+                    "character/${
+                        characterUseCases.getPagination(
+                            query = state.query, 
+                            page = state.pagination?.next
+                        )
+                    }"
                 )
                 .onSuccess { response ->
                     state = state.copy(
-                        characters = characterUseCases.getListCharacters(
-                            firstList = response.results,
-                            secondList =  state.characters
-                        ),
+                        characters = state.characters + response.results,
                         pagination = response.info,
                         isSearching = false,
                         query = ""
