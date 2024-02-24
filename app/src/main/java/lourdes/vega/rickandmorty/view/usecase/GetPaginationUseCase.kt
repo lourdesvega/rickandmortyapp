@@ -1,6 +1,6 @@
-package lourdes.vega.rickandmorty.usecase
+package lourdes.vega.rickandmorty.view.usecase
 
-class GetPagination {
+class GetPaginationUseCase {
     companion object {
         const val ROUTE_CHARACTER = "https://rickandmortyapi.com/api/character"
     }

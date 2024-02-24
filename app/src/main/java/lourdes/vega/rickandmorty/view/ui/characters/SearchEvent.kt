@@ -1,6 +1,6 @@
-package lourdes.vega.rickandmorty.view.characters
+package lourdes.vega.rickandmorty.view.ui.characters
 
-import lourdes.vega.rickandmorty.model.Character
+import lourdes.vega.rickandmorty.network.model.Character
 
 
 sealed class SearchEvent {

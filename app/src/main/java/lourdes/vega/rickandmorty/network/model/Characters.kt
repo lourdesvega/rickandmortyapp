@@ -1,4 +1,4 @@
-package lourdes.vega.rickandmorty.model
+package lourdes.vega.rickandmorty.network.model
 
 data class Characters(
     val info: Info,

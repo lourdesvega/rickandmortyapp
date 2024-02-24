@@ -1,4 +1,4 @@
-package lourdes.vega.rickandmorty.view
+package lourdes.vega.rickandmorty.view.ui
 
 
 import android.widget.Toast
@@ -49,10 +49,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import lourdes.vega.rickandmorty.R
-import lourdes.vega.rickandmorty.navigation.Route
-import lourdes.vega.rickandmorty.view.characters.SearchEvent
-import lourdes.vega.rickandmorty.view.characters.SearchState
-import lourdes.vega.rickandmorty.viewmodel.CharactersViewModel
+import lourdes.vega.rickandmorty.view.navigation.Route
+import lourdes.vega.rickandmorty.view.DescriptionComponent
+import lourdes.vega.rickandmorty.view.SubtitleComponent
+import lourdes.vega.rickandmorty.view.TitleComponent
+import lourdes.vega.rickandmorty.view.ui.characters.SearchEvent
+import lourdes.vega.rickandmorty.view.ui.characters.SearchState
+import lourdes.vega.rickandmorty.view.viewmodel.CharactersViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)

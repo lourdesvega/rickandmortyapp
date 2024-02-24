@@ -1,7 +1,7 @@
-package lourdes.vega.rickandmorty.view.characters
+package lourdes.vega.rickandmorty.view.ui.characters
 
-import lourdes.vega.rickandmorty.model.Character
-import lourdes.vega.rickandmorty.model.Info
+import lourdes.vega.rickandmorty.network.model.Character
+import lourdes.vega.rickandmorty.network.model.Info
 
 data class SearchState(
     val query: String = "",

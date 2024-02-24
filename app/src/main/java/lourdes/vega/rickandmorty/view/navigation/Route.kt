@@ -1,4 +1,4 @@
-package lourdes.vega.rickandmorty.navigation
+package lourdes.vega.rickandmorty.view.navigation
 
 object Route {
     const val CHARACTERS_LIST = "characters_list"

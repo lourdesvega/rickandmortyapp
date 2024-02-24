@@ -13,11 +13,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lourdes.vega.rickandmorty.navigation.Route
+import lourdes.vega.rickandmorty.view.navigation.Route
 import lourdes.vega.rickandmorty.ui.theme.RickAndMortyTheme
-import lourdes.vega.rickandmorty.view.CharactersScreen
-import lourdes.vega.rickandmorty.view.characters.CharacterScreen
-import lourdes.vega.rickandmorty.viewmodel.CharactersViewModel
+import lourdes.vega.rickandmorty.view.ui.CharactersScreen
+import lourdes.vega.rickandmorty.view.ui.characters.CharacterScreen
+import lourdes.vega.rickandmorty.view.viewmodel.CharactersViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

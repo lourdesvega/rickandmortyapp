@@ -1,12 +1,12 @@
 package lourdes.vega.rickandmorty.getPagination
 
 import junit.framework.TestCase.assertEquals
-import lourdes.vega.rickandmorty.usecase.GetPagination
+import lourdes.vega.rickandmorty.view.usecase.GetPaginationUseCase
 import org.junit.Test
 
-class GetPaginationTest {
+class GetPaginationUseCaseTest {
 
-    private val characterUseCases = GetPagination()
+    private val characterUseCases = GetPaginationUseCase()
 
     @Test
     fun `when invoke pagination without query param and without page param return empty result`() {

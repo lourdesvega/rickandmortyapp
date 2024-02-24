@@ -1,28 +1,30 @@
-package lourdes.vega.rickandmorty.viewmodel
+package lourdes.vega.rickandmorty.view.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lourdes.vega.rickandmorty.usecase.CharacterUseCases
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import lourdes.vega.rickandmorty.model.Character
-import lourdes.vega.rickandmorty.view.characters.SearchEvent
-import lourdes.vega.rickandmorty.view.characters.SearchState
+import lourdes.vega.rickandmorty.domain.usecase.GetCharactersUseCase
+import lourdes.vega.rickandmorty.network.model.Character
+import lourdes.vega.rickandmorty.view.usecase.GetPaginationUseCase
+import lourdes.vega.rickandmorty.view.ui.characters.SearchEvent
+import lourdes.vega.rickandmorty.view.ui.characters.SearchState
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
-    private val characterUseCases: CharacterUseCases
+    private val getCharactersUseCase: GetCharactersUseCase,
+    private val getPaginationUseCase: GetPaginationUseCase
 ):ViewModel(){
 
     var state by mutableStateOf(SearchState())
         private set
-    var character : Character ? = null
+    var character : Character? = null
         private set
 
     private val _uiEvent = Channel<String>()
@@ -54,10 +56,9 @@ class CharactersViewModel @Inject constructor(
             state = state.copy(
                 isSearching = true
             )
-            characterUseCases
-                .getCharacters(
+            getCharactersUseCase(
                     "character/${
-                        characterUseCases.getPagination(
+                        getPaginationUseCase(
                             query = state.query, 
                             page = state.pagination?.next
                         )

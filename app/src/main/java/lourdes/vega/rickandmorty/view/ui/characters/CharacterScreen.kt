@@ -1,4 +1,4 @@
-package lourdes.vega.rickandmorty.view.characters
+package lourdes.vega.rickandmorty.view.ui.characters
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,7 @@ import lourdes.vega.rickandmorty.R
 import lourdes.vega.rickandmorty.view.DescriptionComponent
 import lourdes.vega.rickandmorty.view.SubtitleComponent
 import lourdes.vega.rickandmorty.view.TitleComponent
-import lourdes.vega.rickandmorty.viewmodel.CharactersViewModel
+import lourdes.vega.rickandmorty.view.viewmodel.CharactersViewModel
 
 @Composable
 fun CharacterScreen(

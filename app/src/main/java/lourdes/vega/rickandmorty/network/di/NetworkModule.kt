@@ -1,9 +1,12 @@
-package lourdes.vega.rickandmorty.network
+package lourdes.vega.rickandmorty.network.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import lourdes.vega.rickandmorty.domain.repository.RickAndMortyRepository
+import lourdes.vega.rickandmorty.network.ApiService
+import lourdes.vega.rickandmorty.network.repository.RickAndMortyRepositoryImp
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,5 +36,13 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRickAndMortyRepositoryImp(
+        apiService: ApiService
+    ):RickAndMortyRepository{
+        return RickAndMortyRepositoryImp(apiService = apiService)
     }
 }
